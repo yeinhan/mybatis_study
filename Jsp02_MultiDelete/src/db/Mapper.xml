@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.multi" >
+<!-- 	<resultMap type="com.multi.dto.MDBoardDto" id="mdmap"> -->
+<!-- 		<result property="seq" column="SEQ"></result> -->
+<!-- 		<result property="writer" column="WRITER"></result> -->
+<!-- 		<result property="title" column="TITLE"></result> -->
+<!-- 		<result property="content" column="CONTENT"></result> -->
+<!-- 		<result property="regdate" column="REGDATE"></result> -->
+<!-- 	</resultMap> -->
+
+	<select id="selectAll" resultType="MDBoardDto" >
+		SELECT SEQ, WRITER, TITLE, CONTENT, REGDATE
+		FROM MDBOARD
+	</select>
+	
+	<select id="selectOne" parameterType="int"  resultType="MDBoardDto">
+	SELECT *
+	FROM MDBOARD
+	WHERE SEQ = #{seq}
+	</select>
+	
+	<delete id="muldel" parameterType="map">
+		DELETE FROM MDBOARD
+		WHERE SEQ IN
+		<foreach collection="seq" item="seq" open = "(" separator="," close=")">
+		#{seq}
+		</foreach> 
+	</delete>
+	
+	<insert id="insert" parameterType="MDBoardDto">
+		INSERT INTO MDBOARD
+		VALUES(MDBOARDSEQ.NEXTVAL, #{writer}, #{title}, #{content}, SYSDATE)
+	</insert>
+	
+	<update id="update" parameterType="MDBoardDto">
+		UPDATE MDBOARD
+		SET TITLE = #{title}, CONTENT = #{content}
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<delete id="delete" parameterType="MDBoardDto">
+		DELETE FROM MDBOARD
+		WHERE SEQ = #{seq}
+	</delete>
+</mapper>
